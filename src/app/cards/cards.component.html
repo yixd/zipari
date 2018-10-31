@@ -1,0 +1,26 @@
+<div class="container">
+  <div *ngIf="pile || cards">
+    <app-card *ngFor="let card of (pile || cards)" [card]=card></app-card>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="container">
+  <form [formGroup]="filters" (ngSubmit)="draw()">
+    <mat-form-field>
+      <mat-select placeholder="Suits" formControlName="suits" multiple>
+        <mat-option *ngFor="let suit of Suits" [value]="suit">{{suit}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-button type="submit">Draw</button>
+  </form>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="container">
+    <div *ngIf="hand">
+        <app-card *ngFor="let card of hand" [card]=card></app-card>
+      </div>
+</div>
