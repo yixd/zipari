@@ -31,7 +31,7 @@ export class CardsComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
   getRandom(arr, n) {
     const shuffled = arr.sort(() => .5 - Math.random());
@@ -42,6 +42,8 @@ export class CardsComponent implements OnInit {
   draw() {
     console.log('draw');
     this.hand = this.getRandom(this.cards, 5);
-    this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort();
+    this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort((a, b) =>
+      (a.suit != b.suit) ? this.Suits.indexOf(a.suit) - this.Suits.indexOf(b.suit) : this.Ranks.indexOf(a.rank) - this.Ranks.indexOf(b.rank)
+    );
   }
 }
