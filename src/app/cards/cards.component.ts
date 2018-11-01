@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Card } from '../card';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Card } from '../shared/card.model';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { RankValidator, ParentErrorStateMatcher } from '../custom_validators/rank.validator';
+
 @Component({
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  Suits: string[] = ['♣', '♦', '♠', '♥'];
-  Ranks: string[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  readonly SUITS: string[] = ['♣', '♦', '♠', '♥'];
+  readonly RANKS: string[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
   cards: Card[] = [];
   pile: Card[];
   hand: Card[] = [];
   parentErrorStateMatcher = new ParentErrorStateMatcher();
-  filters = this.fb.group({
-    suits: [this.Suits, Validators.required],
+
+  filters: FormGroup = this.fb.group({
+    suits: [this.SUITS, Validators.required],
     size: [5, [
       Validators.required,
       Validators.min(1),
@@ -56,31 +58,44 @@ export class CardsComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.Suits.forEach(function (suit) {
-      //console.log(this.Ranks);
-      this.Ranks.forEach(function (rank) {
+    // generate the initial deck
+    this.SUITS.forEach(function (suit) {
+      this.RANKS.forEach(function (rank) {
         var card = new Card(rank, suit);
         this.cards.push(card);
       }, this);
     }, this);
   }
 
+  /**
+   * get a random hand of cards based on filtering criterias
+   * 
+   * @param arr - array of Cards
+   * @param n - size of hand
+   * @param suits - selected suits
+   * @param minRank - minimum rank
+   * @param maxRank - maximum rank
+   */
   getRandom(arr, n, suits, minRank, maxRank) {
-    arr = arr.filter((x) => suits.includes(x.suit) && this.Ranks.indexOf(minRank) <= this.Ranks.indexOf(x.rank) && this.Ranks.indexOf(x.rank) <= this.Ranks.indexOf(maxRank));
+    arr = arr.filter((x) => suits.includes(x.suit) && this.RANKS.indexOf(minRank) <= this.RANKS.indexOf(x.rank) && this.RANKS.indexOf(x.rank) <= this.RANKS.indexOf(maxRank));
     const shuffled = arr.sort(() => .5 - Math.random());
     let ret = shuffled.slice(0, n);
-    //console.log(ret);
     return ret;
   }
 
+  /**
+   * draw a hand of card from deck
+   */
   draw() {
     const size = this.filters.get('size').value; 
     const suits = this.filters.get('suits').value;
     const minRank = this.filters.get(['ranks', 'minRank']).value;
     const maxRank = this.filters.get(['ranks', 'maxRank']).value;
+    // update hand 
     this.hand = this.getRandom(this.cards, size, suits, minRank, maxRank);
+    // update pile and sort
     this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort((a, b) =>
-      (a.suit != b.suit) ? this.Suits.indexOf(a.suit) - this.Suits.indexOf(b.suit) : this.Ranks.indexOf(a.rank) - this.Ranks.indexOf(b.rank)
+      (a.suit != b.suit) ? this.SUITS.indexOf(a.suit) - this.SUITS.indexOf(b.suit) : this.RANKS.indexOf(a.rank) - this.RANKS.indexOf(b.rank)
     );
   }
 }
