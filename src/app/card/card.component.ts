@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Card } from '../card';
+import { Card } from '../shared/card.model';
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',

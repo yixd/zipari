@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Deck of Cards Application</mat-card-title>
-    <mat-card-subtitle>Made by Jason</mat-card-subtitle>
+    <mat-card-subtitle>Made by Jason Ding for Zipari</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <div class="container pile" *ngIf="pile || cards">
@@ -18,7 +18,7 @@
       <form [formGroup]="filters" (ngSubmit)="draw()">
         <mat-form-field>
           <mat-select placeholder="Suits" formControlName="suits" multiple>
-            <mat-option *ngFor="let suit of Suits" [value]="suit">{{suit}}</mat-option>
+            <mat-option *ngFor="let suit of SUITS" [value]="suit">{{suit}}</mat-option>
           </mat-select>
           <mat-error *ngFor="let validation of validation_messages.suits">
             <mat-error class="error-message" *ngIf="filters.get('suits').hasError(validation.type) && (filters.get('suits').dirty || filters.get('suits').touched)">{{validation.message}}</mat-error>
