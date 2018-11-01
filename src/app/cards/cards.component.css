@@ -9,9 +9,11 @@ mat-card {
 .container {
     padding: 15px;
 }
+
 .pile {
     background-color: darkseagreen;
 }
+
 .hand {
     background-color: rgb(172, 209, 172);
 }
@@ -19,11 +21,3 @@ mat-card {
 mat-form-field {
     margin: 10px;
 }
-/*.section {
-    display: flex;
-    align-content: center;
-    align-items: center;
-    margin-top: 10px;
-}
-
-  */

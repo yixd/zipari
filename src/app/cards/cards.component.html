@@ -20,20 +20,32 @@
           <mat-select placeholder="Suits" formControlName="suits" multiple>
             <mat-option *ngFor="let suit of Suits" [value]="suit">{{suit}}</mat-option>
           </mat-select>
+          <mat-error *ngFor="let validation of validation_messages.suits">
+            <mat-error class="error-message" *ngIf="filters.get('suits').hasError(validation.type) && (filters.get('suits').dirty || filters.get('suits').touched)">{{validation.message}}</mat-error>
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput type="number" placeholder="# of Cards" formControlName="size">
+          <mat-error *ngFor="let validation of validation_messages.size">
+            <mat-error class="error-message" *ngIf="filters.get('size').hasError(validation.type) && (filters.get('size').dirty || filters.get('size').touched)">{{validation.message}}</mat-error>
+          </mat-error>
         </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="Min card value" formControlName="minRank">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput type="number" placeholder="Max card value" formControlName="maxRank">
-        </mat-form-field>
-        <button mat-fab color="primary" type="submit">Draw</button>
+        <div formGroupName="ranks">
+          <mat-form-field>
+            <input matInput type="string" placeholder="Min card value" formControlName="minRank">
+            <mat-error *ngFor="let validation of validation_messages.minRank">
+              <mat-error class="error-message" *ngIf="filters.get('ranks').get('minRank').hasError(validation.type) && (filters.get('ranks').get('minRank').dirty || filters.get('ranks').get('minRank').touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="string" placeholder="Max card value" formControlName="maxRank" [errorStateMatcher]="parentErrorStateMatcher">
+            <mat-error *ngFor="let validation of validation_messages.maxRank">
+              <mat-error class="error-message" *ngIf="filters.get(['ranks', 'maxRank']).hasError(validation.type) || filters.get('ranks').hasError(validation.type) && (filters.get(['ranks', 'maxRank']).dirty || filters.get(['ranks', 'maxRank']).touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <button mat-fab color="primary" [disabled]="filters.invalid" type="submit">Draw</button>
       </form>
     </div>
-
-
   </mat-card-content>
 </mat-card>
