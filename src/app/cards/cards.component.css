@@ -18,6 +18,10 @@ mat-card {
     background-color: rgb(172, 209, 172);
 }
 
+button {
+    margin: 10px;
+}
+
 mat-form-field {
     margin: 10px;
 }

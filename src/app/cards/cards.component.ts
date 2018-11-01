@@ -11,6 +11,7 @@ import { RankValidator, ParentErrorStateMatcher } from '../custom_validators/ran
 export class CardsComponent implements OnInit {
   readonly SUITS: string[] = ['♣', '♦', '♠', '♥'];
   readonly RANKS: string[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  readonly MAX_DECK_SIZE: number = 3;
   cards: Card[] = [];
   pile: Card[];
   hand: Card[] = [];
@@ -18,10 +19,15 @@ export class CardsComponent implements OnInit {
 
   filters: FormGroup = this.fb.group({
     suits: [this.SUITS, Validators.required],
-    size: [5, [
+    handSize: [5, [
       Validators.required,
       Validators.min(1),
-      Validators.max(42)
+      Validators.max(this.MAX_DECK_SIZE * 42)
+    ]],
+    deckSize: [1, [
+      Validators.required,
+      Validators.min(1),
+      Validators.max(this.MAX_DECK_SIZE)
     ]],
     ranks: this.fb.group({
       minRank: ['A', [
@@ -39,10 +45,15 @@ export class CardsComponent implements OnInit {
     'suits': [
       { type: 'required', message: 'Please choose at least one suit' }
     ],
-    'size': [
+    'handSize': [
       { type: 'required', message: 'Please choose at least one card' },
       { type: 'min', message: 'Please choose at least one card' },
-      { type: 'max', message: 'Please choose at most 42 cards' }
+      { type: 'max', message: `Please choose at most ${this.MAX_DECK_SIZE * 42} cards` }
+    ],
+    'deckSize': [
+      { type: 'required', message: 'Please choose at least one deck' },
+      { type: 'min', message: 'Please choose at least one deck' },
+      { type: 'max', message: `Please choose at most ${this.MAX_DECK_SIZE} decks` }
     ],
     'minRank': [
       { type: 'required', message: 'Maximum rank required' },
@@ -59,14 +70,29 @@ export class CardsComponent implements OnInit {
 
   ngOnInit() {
     // generate the initial deck
+    this.initializeDecks(1);
+    this.filters.get('deckSize').valueChanges.subscribe(data => {
+      if(this.filters.get('deckSize').valid) {
+        this.initializeDecks(data);
+      }
+    })
+  }
+
+  /**
+   * initialize decks based on number given
+   * @param numOfDecks 
+   */
+  initializeDecks(numOfDecks: number) {
+    this.cards = [];
     this.SUITS.forEach(function (suit) {
       this.RANKS.forEach(function (rank) {
-        var card = new Card(rank, suit);
-        this.cards.push(card);
+        for (var i = 0; i < numOfDecks; i++) {
+          var card = new Card(rank, suit);
+          this.cards.push(card);
+        }
       }, this);
     }, this);
   }
-
   /**
    * get a random hand of cards based on filtering criterias
    * 
@@ -87,12 +113,12 @@ export class CardsComponent implements OnInit {
    * draw a hand of card from deck
    */
   draw() {
-    const size = this.filters.get('size').value; 
+    const handSize = this.filters.get('handSize').value;
     const suits = this.filters.get('suits').value;
     const minRank = this.filters.get(['ranks', 'minRank']).value;
     const maxRank = this.filters.get(['ranks', 'maxRank']).value;
     // update hand 
-    this.hand = this.getRandom(this.cards, size, suits, minRank, maxRank);
+    this.hand = this.getRandom(this.cards, handSize, suits, minRank, maxRank);
     // update pile and sort
     this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort((a, b) =>
       (a.suit != b.suit) ? this.SUITS.indexOf(a.suit) - this.SUITS.indexOf(b.suit) : this.RANKS.indexOf(a.rank) - this.RANKS.indexOf(b.rank)

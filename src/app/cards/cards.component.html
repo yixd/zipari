@@ -7,15 +7,21 @@
     <div class="container pile" *ngIf="pile || cards">
       <app-card *ngFor="let card of (pile || cards)" [card]=card></app-card>
     </div>
-    
+
     <div class="container hand" [ngClass]="{'transition':enter}" [hidden]="!hand.length">
       <div *ngIf="hand">
         <app-card *ngFor="let card of hand" [card]=card></app-card>
       </div>
     </div>
-    
+
     <div class="container">
       <form [formGroup]="filters" (ngSubmit)="draw()">
+        <mat-form-field>
+          <input matInput type="number" placeholder="# of Decks" formControlName="deckSize">
+          <mat-error *ngFor="let validation of validation_messages.deckSize">
+            <mat-error class="error-message" *ngIf="filters.get('deckSize').hasError(validation.type) && (filters.get('deckSize').dirty || filters.get('deckSize').touched)">{{validation.message}}</mat-error>
+          </mat-error>
+        </mat-form-field>
         <mat-form-field>
           <mat-select placeholder="Suits" formControlName="suits" multiple>
             <mat-option *ngFor="let suit of SUITS" [value]="suit">{{suit}}</mat-option>
@@ -25,9 +31,9 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="number" placeholder="# of Cards" formControlName="size">
-          <mat-error *ngFor="let validation of validation_messages.size">
-            <mat-error class="error-message" *ngIf="filters.get('size').hasError(validation.type) && (filters.get('size').dirty || filters.get('size').touched)">{{validation.message}}</mat-error>
+          <input matInput type="number" placeholder="# of Cards" formControlName="handSize">
+          <mat-error *ngFor="let validation of validation_messages.handSize">
+            <mat-error class="error-message" *ngIf="filters.get('handSize').hasError(validation.type) && (filters.get('handSize').dirty || filters.get('handSize').touched)">{{validation.message}}</mat-error>
           </mat-error>
         </mat-form-field>
         <div formGroupName="ranks">
