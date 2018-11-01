@@ -36,11 +36,12 @@ export class CardsComponent implements OnInit {
   getRandom(arr, n) {
     const shuffled = arr.sort(() => .5 - Math.random());
     let ret = shuffled.slice(0, n);
-    console.log(ret);
+    //console.log(ret);
     return ret;
   }
   draw() {
     console.log('draw');
+    console.log(this.filters.value);
     this.hand = this.getRandom(this.cards, 5);
     this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort((a, b) =>
       (a.suit != b.suit) ? this.Suits.indexOf(a.suit) - this.Suits.indexOf(b.suit) : this.Ranks.indexOf(a.rank) - this.Ranks.indexOf(b.rank)

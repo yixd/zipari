@@ -1,26 +1,39 @@
-<div class="container">
-  <div *ngIf="pile || cards">
-    <app-card *ngFor="let card of (pile || cards)" [card]=card></app-card>
-  </div>
-</div>
-
-<mat-divider></mat-divider>
-
-<div class="container">
-  <form [formGroup]="filters" (ngSubmit)="draw()">
-    <mat-form-field>
-      <mat-select placeholder="Suits" formControlName="suits" multiple>
-        <mat-option *ngFor="let suit of Suits" [value]="suit">{{suit}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button mat-button type="submit">Draw</button>
-  </form>
-</div>
-
-<mat-divider></mat-divider>
-
-<div class="container">
-    <div *ngIf="hand">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Deck of Cards Application</mat-card-title>
+    <mat-card-subtitle>Made by Jason</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="container pile" *ngIf="pile || cards">
+      <app-card *ngFor="let card of (pile || cards)" [card]=card></app-card>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="container hand" [ngClass]="{'transition':enter}" [hidden]="!hand.length">
+      <div *ngIf="hand">
         <app-card *ngFor="let card of hand" [card]=card></app-card>
       </div>
-</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="container">
+      <form [formGroup]="filters" (ngSubmit)="draw()">
+        <mat-form-field>
+          <mat-select placeholder="Suits" formControlName="suits" multiple>
+            <mat-option *ngFor="let suit of Suits" [value]="suit">{{suit}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="# of Cards" formControlName="size">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Min card value" formControlName="minRank">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Max card value" formControlName="maxRank">
+        </mat-form-field>
+        <button mat-fab color="primary" type="submit">Draw</button>
+      </form>
+    </div>
+
+
+  </mat-card-content>
+</mat-card>

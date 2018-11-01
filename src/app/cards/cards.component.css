@@ -1,4 +1,29 @@
-.container {
-    display: flex;
-    flex-direction: column;
+mat-card-header {
+    padding: 15px;
+    background-color: whitesmoke;
 }
+mat-card {
+    padding: 0;
+    margin: 20px;
+}
+.container {
+    padding: 15px;
+}
+.pile {
+    background-color: darkseagreen;
+}
+.hand {
+    background-color: rgb(172, 209, 172);
+}
+
+mat-form-field {
+    margin: 10px;
+}
+/*.section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+  */

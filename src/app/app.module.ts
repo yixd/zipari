@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { MatDividerModule, MatCardModule, MatSelectModule, MatButtonModule, MatInputModule } from '@angular/material';
+import { MatListModule, MatDividerModule, MatCardModule, MatSelectModule, MatButtonModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,7 +24,8 @@ import { CardComponent } from './card/card.component';
     BrowserAnimationsModule,
     MatButtonModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
