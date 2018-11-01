@@ -7,13 +7,13 @@
     <div class="container pile" *ngIf="pile || cards">
       <app-card *ngFor="let card of (pile || cards)" [card]=card></app-card>
     </div>
-    <mat-divider></mat-divider>
+    
     <div class="container hand" [ngClass]="{'transition':enter}" [hidden]="!hand.length">
       <div *ngIf="hand">
         <app-card *ngFor="let card of hand" [card]=card></app-card>
       </div>
     </div>
-    <mat-divider></mat-divider>
+    
     <div class="container">
       <form [formGroup]="filters" (ngSubmit)="draw()">
         <mat-form-field>

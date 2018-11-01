@@ -64,15 +64,21 @@ export class CardsComponent implements OnInit {
       }, this);
     }, this);
   }
-  getRandom(arr, n) {
+
+  getRandom(arr, n, suits, minRank, maxRank) {
+    arr = arr.filter((x) => suits.includes(x.suit) && this.Ranks.indexOf(minRank) <= this.Ranks.indexOf(x.rank) && this.Ranks.indexOf(x.rank) <= this.Ranks.indexOf(maxRank));
     const shuffled = arr.sort(() => .5 - Math.random());
     let ret = shuffled.slice(0, n);
     //console.log(ret);
     return ret;
   }
+
   draw() {
     const size = this.filters.get('size').value; 
-    this.hand = this.getRandom(this.cards, size);
+    const suits = this.filters.get('suits').value;
+    const minRank = this.filters.get(['ranks', 'minRank']).value;
+    const maxRank = this.filters.get(['ranks', 'maxRank']).value;
+    this.hand = this.getRandom(this.cards, size, suits, minRank, maxRank);
     this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort((a, b) =>
       (a.suit != b.suit) ? this.Suits.indexOf(a.suit) - this.Suits.indexOf(b.suit) : this.Ranks.indexOf(a.rank) - this.Ranks.indexOf(b.rank)
     );
