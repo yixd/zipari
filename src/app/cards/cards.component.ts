@@ -16,7 +16,11 @@ export class CardsComponent implements OnInit {
   parentErrorStateMatcher = new ParentErrorStateMatcher();
   filters = this.fb.group({
     suits: [this.Suits, Validators.required],
-    size: ['5', Validators.required],
+    size: [5, [
+      Validators.required,
+      Validators.min(1),
+      Validators.max(42)
+    ]],
     ranks: this.fb.group({
       minRank: ['A', [
         Validators.required,
@@ -31,10 +35,12 @@ export class CardsComponent implements OnInit {
 
   validation_messages = {
     'suits': [
-      { type: 'required', message: 'Please choose at least 1 suit' }
+      { type: 'required', message: 'Please choose at least one suit' }
     ],
     'size': [
-      { type: 'required', message: 'Please choose at least 1 card' }
+      { type: 'required', message: 'Please choose at least one card' },
+      { type: 'min', message: 'Please choose at least one card' },
+      { type: 'max', message: 'Please choose at most 42 cards' }
     ],
     'minRank': [
       { type: 'required', message: 'Maximum rank required' },
@@ -47,7 +53,9 @@ export class CardsComponent implements OnInit {
     ]
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) { }
+
+  ngOnInit() {
     this.Suits.forEach(function (suit) {
       //console.log(this.Ranks);
       this.Ranks.forEach(function (rank) {
@@ -55,11 +63,6 @@ export class CardsComponent implements OnInit {
         this.cards.push(card);
       }, this);
     }, this);
-    //console.log(this.cards);
-  }
-
-  ngOnInit() {
-
   }
   getRandom(arr, n) {
     const shuffled = arr.sort(() => .5 - Math.random());
@@ -68,7 +71,8 @@ export class CardsComponent implements OnInit {
     return ret;
   }
   draw() {
-    this.hand = this.getRandom(this.cards, 5);
+    const size = this.filters.get('size').value; 
+    this.hand = this.getRandom(this.cards, size);
     this.pile = this.cards.filter((card) => !this.hand.includes(card)).sort((a, b) =>
       (a.suit != b.suit) ? this.Suits.indexOf(a.suit) - this.Suits.indexOf(b.suit) : this.Ranks.indexOf(a.rank) - this.Ranks.indexOf(b.rank)
     );
